@@ -1,0 +1,5 @@
+class RemoveOursUsedFromHistoric < ActiveRecord::Migration
+  def change
+    remove_column :historics, :ours_used, :integuer
+  end
+end

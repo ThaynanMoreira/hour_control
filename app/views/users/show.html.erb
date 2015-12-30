@@ -1,0 +1,85 @@
+
+
+<!-- links para fazer o datepiker funcionar  -->
+<link href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
+
+<script src="../files/js/jquery.min.js"></script>
+<script src="../files/js/bootstrap.js"></script>
+<script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR.js"></script>
+
+<!-- links para fazer o datepiker funcionar  -->
+
+<p id="notice"><%= notice %></p>
+	<div class="row">
+	  <aside class="span3">
+	    <section>
+	      <h1>
+	        
+	        <%= @user.name %>
+	      </h1>
+          <br><%= @user.email %>
+	    </section>
+
+  </aside>
+  <aside class="span6">
+    <div class="pull-left range-query">
+      <%= form_tag @url_search, :method => :get do %>
+        <%= label_tag "Selecionar Data" %>
+        <div  >
+          <%= text_field_tag :date, "#{Date.today.strftime"%m/%Y"}", 'data-behaviour' => 'datepicker' %>
+        </div>
+        <%= submit_tag 'Procurar', :class => 'btn btn-primary search-button' %>
+        <% end %>
+    </div>
+    <br>
+    <br>
+
+    <%= render 'layouts/historic_feed' %>
+	<br>
+    <br>
+
+    <div>
+      <% if !@chart.nil? %>
+
+          <div id='chart'  ></div>
+          <%= render_chart @chart, 'chart' %>
+      <% end %>
+    </div>
+    <div class="row">
+      <%#= render 'layouts/search'  %>
+    </div>
+
+
+  </aside>
+</div>
+
+
+
+<br>
+<% if current_user?(@user) %>
+    <%= link_to 'Editar', edit_user_path(@user) %> |
+<% end %>
+<%= link_to 'Voltar', users_path %></br>
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>
+
+
+    <script type="text/javascript">
+
+        $('[data-behaviour~=datepicker]').datepicker({
+            format: "mm/yyyy",
+            minViewMode: 1,
+            todayBtn: "linked",
+            language: "pt-BR",
+            startDate: "01/2012",
+            autoclose: true
+        });
+
+    </script>

@@ -1,0 +1,44 @@
+<h1><%= @user.name %></h1>
+
+
+
+<div class="row">
+  <div class="pull-left range-query">
+
+    <%= form_tag add_projects_path, :method => :get do %>
+        <%= text_field_tag 'search[search_word]'%>
+        <%#= autocomplete_field 'search[search_word]', @search.search_word, autocomplete_project_name_projects_path%>
+
+        <%= hidden_field_tag :id, @user.id %>
+        <%= submit_tag 'Procurar', :class => 'btn search-button btn-primary' %>
+    <% end %>
+  </div>
+</div>
+
+<%#= will_paginate @projects%>
+
+
+<table class="table" border="0" >
+  <th></th>
+  <th></th>
+
+
+
+  <% @projects.each do |project| %>
+
+      <% @project = project %>
+      <tr>
+
+        <td> <%= project.name %> </td>
+        <td> <%= render("follow_project") %> </td>
+      <tr>
+
+
+
+  <% end %>
+</table>
+
+<%#= will_paginate @projects%>
+
+
+<%= link_to "voltar", users_config_path %>

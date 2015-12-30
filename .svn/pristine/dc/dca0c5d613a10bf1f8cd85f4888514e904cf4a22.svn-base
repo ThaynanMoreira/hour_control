@@ -1,0 +1,88 @@
+
+
+<!-- links para fazer o datepiker funcionar  -->
+<link href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
+
+<script src="../files/js/jquery.min.js"></script>
+<script src="../files/js/bootstrap.js"></script>
+<script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR.js"></script>
+
+<!-- links para fazer o datepiker funcionar  -->
+
+<head>
+	<p id="notice"><%= notice %></p>
+	<div class="row">
+	  <aside class="span4">
+	    <section>
+	      <h1>
+	        
+	        <%= @project.name %>
+	      </h1>
+	    </section>
+
+      <% if current_user.type_id == 1 %>
+        <section>
+            <% if @listTimetables.any? %>
+                <%#= render 'layouts/historic_feed_bar' %>
+            <% end %>
+            <% if current_user.type.id == 1%>
+                <%= render 'layouts/timetable_form' %>
+            <% end %>
+        </section>
+      <% end %>
+
+
+  </aside>
+      <aside class="span5 center">
+
+        <div class="row pull-left ">
+          <%= form_tag @url_search, :method => :get do %>
+              <%= label_tag "Selecionar Data" %>
+              <div  >
+                <%= text_field_tag :date, "#{@date.strftime"%m/%Y"}", 'data-behaviour' => 'datepicker' %>
+              </div>
+              <%= submit_tag 'Procurar', :class => 'btn btn-primary search-button' %>
+          <% end %>
+        </div>
+        <br>
+        <%= render 'layouts/historic_feed' %>
+
+
+
+
+      </aside>
+
+
+
+</div>
+</head>
+<%= @project.name %>, Created by: <%= @project.user.name %>
+<br>
+<%= link_to 'Back', projects_path %></br>
+
+
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>
+
+
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>
+
+
+<script type="text/javascript">
+
+    $('[data-behaviour~=datepicker]').datepicker({
+        format: "mm/yyyy",
+        minViewMode: 1,
+        todayBtn: "linked",
+        language: "pt-BR",
+        startDate: "01/2012",
+        autoclose: true
+    });
+
+</script>

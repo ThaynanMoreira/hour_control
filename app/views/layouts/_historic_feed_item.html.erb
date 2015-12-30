@@ -1,0 +1,39 @@
+
+
+    <td ><%= link_to historic_feed_item.project.name, historic_feed_item.project %></td>
+
+    <td > <%= link_to historic_feed_item.user.name, historic_feed_item.user %>  </td>
+
+    <td > <%= historic_feed_item.enter_work.strftime"%H:%M" %> </td>
+
+    <td > <%= historic_feed_item.exit_work.strftime"%H:%M" %> </td>
+
+    <td > <%= Historic.get_hour(historic_feed_item.hours_used) %> </td>
+
+    <td> <%= historic_feed_item.comment %> </td>
+
+    <% if current_user.id == historic_feed_item.user.id%>
+
+        <td > <%= link_to "Editar", edit_historic_path(historic_feed_item.id) %> </td>
+
+        <td > <%= link_to "Excluir", historic_path(:id => historic_feed_item.id), :method => :delete,
+                          :data => { :confirm => "Tem certeza que deseja deletar o historico ?" },
+                          :title => "Deletar" %> </td>
+        <% if @daily == true %>
+
+            <td > <%= link_to "Clonar", clone_path(:id => historic_feed_item.id) %> </td>
+
+        <% end %>
+    <%else%>
+        <td></td>
+        <td></td>
+        <% if @daily == true %>
+            <td></td>
+        <% end %>
+
+    <%end%>
+
+    <tr>
+
+
+

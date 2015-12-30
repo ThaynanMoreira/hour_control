@@ -1,0 +1,36 @@
+
+<div class="row">
+    <div class="span6 offset3">
+      <%= form_for(@user) do |f| %>
+        <%= render 'layouts/error_messages', :object => f.object %>
+
+
+
+      <div class="field">
+        <%= f.label "Nome" %>
+        <%= f.text_field :name %>
+      </div><br>
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.text_field :email %>
+      </div><br>
+      <div class="field">
+        <%= f.label "Senha" %>
+        <%= f.password_field  :password %>
+      </div><br>
+      <div class="field">
+        <%= f.label :password_confirmation, "Repita a senha"  %>
+        <%= f.password_field  :password_confirmation %>
+      </div><br>
+
+      <label for="user_type_id">Cargo</label>
+      <%= select(:user,:type_id, @types ) %><br><br>
+
+
+      <div class="actions">
+        <%= f.submit "Comfirmar", :class => "btn btn-large btn-primary" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

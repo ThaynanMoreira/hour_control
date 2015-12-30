@@ -1,0 +1,71 @@
+<head>
+	<p id="notice"><%= notice %></p>
+	<div class="row">
+	  <aside class="span4">
+	    <section>
+	      <h1>
+	        
+	        <%= @project.name %>
+	      </h1>
+	    </section>
+	  <section>
+	  	<% if @listTimetables.any? %>
+	  		<%= render 'layouts/historic_feed_bar' %>
+	  	<% end %>
+	  	<% if current_user.type.id == 1%>
+	      	<%= render 'layouts/timetable_form' %>
+	      <% end %>
+    </section>
+  </aside>
+  <div class="span5">
+
+    <div class="row">
+        <%#= render 'follow_project' %>
+        <%= render 'layouts/search' %>
+    </div>
+
+    <%= render 'layouts/historic_feed' %>
+	    
+  </div>
+
+  <aside class="span3">
+
+    <div>
+      <% if (!@chart.nil?) %>
+          <%= form_tag @url_search, :method => :get do %>
+              <p><label for="type_id">Cargo</label>
+                <%= select('type', params[:type], @types ) %></p>
+
+              Escolha a data de:
+              <%= date_field 'of_date', params[:chart] %>
+              até:
+              <%= date_field 'to_date', params[:chart] %>
+              <%= submit_tag 'new chart', :class => 'btn search-button' %>
+          <% end %>
+          <div id='chart'  ></div>
+          <%= render_chart @chart, 'chart' %>
+      <% end %>
+    </div>
+    <div class="row">
+      <%#= render 'layouts/search'  %>
+    </div>
+
+
+  </aside>
+
+</div>
+</head>
+<%= @project.name %>, Created by: <%= @project.user.name %>
+
+<p>
+  Download:
+  <%= link_to "CSV", project_path(:format => "csv") %> |
+  <%= link_to "Excel", project_path(:format => "xls") %>
+</p>
+<br><%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Back', projects_path %></br>
+
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>

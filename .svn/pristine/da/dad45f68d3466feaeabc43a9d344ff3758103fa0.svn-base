@@ -1,0 +1,25 @@
+<%if current_user == @project.user %>
+  <div class="stats">
+    <a href="#">
+      <strong id="following" class="stat">
+        <%= @project.timetables.count %> Tickets
+      </strong>
+    </a>
+    <%=link_to "New Ticket", edit_timetable_path(:project_id => @project.id) %>
+      
+  </div>
+<% end %>
+<br>
+<div class="stats">
+  <a href="<%= projects_path %>">
+    <strong id="following" class="stat">
+      <%= current_user.projects.count %> Projects
+    </strong>
+  </a>
+  <a href="<%= new_project_path %>">
+    <strong id="followers" class="stat">
+     New Project
+    </strong>
+    
+  </a>
+</div>

@@ -1,0 +1,45 @@
+
+<table  border="1" >
+
+
+    <th >Data </th>
+    <th >Projeto</th>
+    <th >Nome</th>
+    <th >Entrada</th>
+    <th >Saída</th>
+    <th >Duração</th>
+    <th >Nota</th>
+    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <% if @daily == true %>
+
+      <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
+    <% end %>
+  <tr>
+
+    <% @days.each do |day| %>
+
+
+          <% historics_day = @feedHistorics.where(:work_date => day) %>
+        <td rowspan="<%=historics_day.size %>" > <%=link_to (day.strftime"%d/%m/%Y"), daily_path(:day => day) %></td>
+
+        <% if historics_day.any? %>
+
+
+                <%= render :partial => 'layouts/historic_feed_item', :collection => historics_day %>
+        <% else %>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            <% if @daily == true %>
+                <td></td>
+            <% end %>
+
+            <tr>
+            <% end %>
+
+
+    <% end %>
+</table>

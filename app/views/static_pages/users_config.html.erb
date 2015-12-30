@@ -1,0 +1,76 @@
+
+<h1>Controle de usuários</h1>
+<div class="row">
+
+
+<% if Confirmation.where(:confirm => false).count > 0 %>
+  <div class="table-responsive">
+    <table class="table" border="1" >
+      <th> Name </th>
+      <th> Email </th>
+      <th> Cargo </th>
+      <th></th>
+
+      <% @no_confirms.each do |user| %>
+
+           <%# @confirm = Confirmation.where(:user_id => user.id).first %>
+           <%# if @confirm.confirm == false %>
+          <tr>
+            <td> <%= user.name %> </td>
+            <td> <%= user.email %> </td>
+            <td> <%= user.type.name %> </td>
+            <td> <%= button_to "Confirmar", confirmations_path(:user_id => user.id), :html => { :method => :post },
+                               :class => "btn btn-small btn-primary" %> </td>
+
+
+          <tr>
+           <%# end %>
+
+      <% end %>
+<% end %>
+
+    </table>
+  </div>
+  <br>
+  <br>
+  <br>
+
+
+
+
+  <div class="row">
+    <div class="pull-left range-query">
+
+      <%= form_tag users_config_path, :method => :get do %>
+          <%= text_field_tag 'search[search_word]'%>
+          <%#= autocomplete_field 'search[search_word]', @search.search_word, autocomplete_user_name_users_path%>
+
+
+          <%= submit_tag 'Procurar', :class => 'btn search-button btn-primary' %>
+      <% end %>
+    </div>
+  </div>
+
+  <%#= will_paginate @users%>
+
+  <table class="table" border="0" >
+    <th></th>
+    <th></th>
+      <% @users.each do |user| %>
+
+        <% @user = user %>
+         <tr>
+
+           <td> <%= user.name %> </td>
+           <td> <%= link_to("Adicionar Projetos", add_projects_path(:id => user.id) ) %> </td>
+
+
+
+         <tr>
+
+      <% end %>
+  </table>
+
+  <%#= will_paginate @users%>
+
+</div>

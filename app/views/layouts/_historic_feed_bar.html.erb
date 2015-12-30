@@ -1,0 +1,6 @@
+<% if @listTimetables.any? %>
+  <ol class="microposts">
+    <%= render :partial => 'layouts/historic_form_bar', :collection => @listTimetables %>
+  </ol>
+  <%#= will_paginate @list_timetables %>
+<% end %>

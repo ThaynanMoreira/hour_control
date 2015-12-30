@@ -1,0 +1,40 @@
+<% if signed_in? %>
+
+<% else %>
+  <div class="center hero-unit">
+    <h1>Bem vindo ao HJM Hours</h1>
+
+    <h2>
+      Faça o seu cadastro.
+    </h2>
+
+    <%= link_to "Cadastre-se!", signup_path,
+                                :class => "btn btn-large btn-primary" %>
+  </div>
+<% end %>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>
+
+
+<script type="text/javascript">
+
+    $('[data-behaviour~=datepicker]').datepicker({
+        format:"mm/yyyy",
+        minViewMode: 1,
+        todayBtn: "linked"
+    });
+
+</script>

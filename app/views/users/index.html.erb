@@ -1,0 +1,55 @@
+<% provide(:title, 'All users') %>
+<h1>Usuários</h1>
+
+
+<div class="row">
+  <aside class="span7 ">
+
+
+    <div class="row">
+      <div class="pull-left range-query">
+        <%= form_tag @url_search, :method => :get do %>
+            <%= text_field_tag 'search[search_word]'%>
+            <%#= autocomplete_field 'search[search_word]', @search.search_word, autocomplete_user_name_users_path%>
+            <%#= hidden_field 'search2[status]', @search2.status = 3 %>
+            <%= submit_tag 'Procurar', :class => 'btn btn-primary search-button' %>
+        <% end %>
+      </div>
+    </div>
+    <%#= will_paginate @users%>
+    <ul class="users">
+
+        <%= render @users %>
+    </ul>
+    <%#= will_paginate @users%>
+ </aside>
+
+  <aside class="span4 ">
+
+    <div>
+      <% if !@chart.nil? %>
+          <%= form_tag @url_search, :method => :get do %>
+
+              <p><label for="user_id">Usuário</label>
+                <%= select('user', params[:chart], @list_users ) %></p>
+
+              Escolha a data de:
+              <%= date_field_tag 'of_date', "#{Date.today.beginning_of_month}"  %>
+              até:
+              <%= date_field_tag 'to_date', "#{Date.today.end_of_month}" %>
+              <%= submit_tag 'Gerar Gráfico', :class => 'btn btn-primary search-button' %>
+          <% end %>
+
+          <div id='chart'  ></div>
+          <%= render_chart @chart, 'chart' %>
+      <% end %>
+    </div>
+
+  </aside>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>

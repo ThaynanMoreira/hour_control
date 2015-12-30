@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Date</Data></Cell>
+        <Cell><Data ss:Type="String">ID</Data></Cell>
+        <Cell><Data ss:Type="String">Project</Data></Cell>
+        <Cell><Data ss:Type="String">Name</Data></Cell>
+        <Cell><Data ss:Type="String">Enter</Data></Cell>
+        <Cell><Data ss:Type="String">Exit</Data></Cell>
+        <Cell><Data ss:Type="String">Duration</Data></Cell>
+      </Row>
+      <% @days.each do |day| %>
+
+
+          <% historics_day = @feedHistorics.where(:work_date => day) %>
+
+          <% if !historics_day.blank? %>
+              <% historics_day.each do |historic| %>
+                  <Row>
+                    <Cell><Data ss:Type="String"> <%= day.strftime"%d/%m/%Y" %> </Data></Cell>
+                    <Cell><Data ss:Type="Number"><%= historic.id %></Data></Cell>
+                    <Cell><Data ss:Type="String"><%= historic.project.name %></Data></Cell>
+                    <Cell><Data ss:Type="String"><%= historic.user.name %></Data></Cell>
+                    <Cell><Data ss:Type="String"><%= historic.enter_work.strftime"%H:%M" %></Data></Cell>
+                    <Cell><Data ss:Type="String"><%= historic.exit_work.strftime"%H:%M" %></Data></Cell>
+                    <Cell><Data ss:Type="String"><%= Historic.get_hour(historic.hours_used) %></Data></Cell>
+                  </Row>
+              <% end %>
+          <% end %>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

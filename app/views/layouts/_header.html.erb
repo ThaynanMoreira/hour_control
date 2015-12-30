@@ -1,0 +1,57 @@
+<header class="navbar-inverse">
+  <div class=" navbar navbar-fixed-top  navbar-header navbar-default">
+    <div class="container">
+      <% if signed_in? %>
+      <%= link_to "HJM Hours", root_path, :id => "logo", :data => { :no_turbolink => true } %>
+      <nav class="">
+        <ul class="nav navbar-nav pull-right">
+
+              <% if @download != nil %>
+                  <li> <%= link_to "Download", @download %> </li>
+              <% end %>
+
+            <li><%= link_to "Mês", monthly_view_path, :data => { :no_turbolink => true } %></li>
+            <li><%= link_to "Dia", daily_path(:day => (Date.today.strftime"%Y-%m-%d")), :data => { :no_turbolink => true }%></li>
+              <% if current_user.type.id == 1 %>
+                  <% @notifications = Confirmation.where(:confirm => false).count %>
+                  <% if @notifications > 0 %>
+                    <li><a data-no-turbolink='true' href="/users_config">Controle de Usuários <span class="badge"><%= @notifications %></span></a></li>
+                  <% else %>
+                      <li><%= link_to "Controle de Usuários", users_config_path, :data => { :no_turbolink => true } %></li>
+                  <% end %>
+              <% end %>
+                  <li id="fat-menu" class="dropdown ">
+              <a href="#" class="dropdown-toggle " data-toggle="dropdown">
+                Menu
+                 <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu pull-left">
+                <li><%= link_to "Usuários", users_path, :data => { :no_turbolink => true } %></li>
+                <li><%= link_to "Projetos", projects_path, :data => { :no_turbolink => true } %></li>
+                <% if current_user.type.id == 1 %>
+                    <li><%= link_to "Relatórios", reports_path, :data => { :no_turbolink => true } %></li>
+                    <li><%= link_to "Novo Projeto", new_project_path, :data => { :no_turbolink => true } %></li>
+                <% end %>
+                <li><%= link_to "Perfil", current_user, :data => { :no_turbolink => true } %></li>
+                <li><%= link_to "Configurações", edit_user_path(current_user), :data => { :no_turbolink => true } %></li>
+                <li class="divider"></li>
+                <li>
+                  <%= link_to "Sair", signout_path, :method => "delete", :data => { :no_turbolink => true } %>
+                </li>
+              </ul>
+            </li>
+
+        </ul>
+      </nav>
+          <% else %>
+          <%= link_to "HJM Hours", root_path, :id => "logo", :data => { :no_turbolink => true } %>
+          <nav>
+            <ul class="nav navbar-nav pull-right">
+            <li><%= link_to "Entre", signin_path, :data => { :no_turbolink => true } %></li>
+            </ul>
+          </nav>
+          <% end %>
+
+    </div>
+  </div>
+</header>

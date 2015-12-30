@@ -1,0 +1,71 @@
+<% if signed_in? %>
+  <div class="row">
+    <aside class="span4 ">
+      <section>
+        <%= render 'layouts/user_info' %>
+      </section>
+      <section>
+        <div class="pull-left range-query">
+          <%= form_tag @url_search, :method => :get do %>
+              <%= text_field_tag :search2, params[:search2] %>
+              <%#= hidden_field 'search2[status]', @search2.status = 3 %>
+              <%= submit_tag 'search', :class => 'btn search-button' %>
+          <% end %>
+        </div>
+        <div>
+        <%= render 'projects_feed' %>
+        </div>
+      </section>
+
+    </aside>
+    <aside class="span5">
+
+    <div class="row">
+    <%= render 'layouts/search'  %>
+    </div>
+    <%= render 'layouts/historic_feed' %>
+
+
+
+  </aside>
+    <aside class="span3">
+
+      <div>
+        <% if !@chart.nil? %>
+
+          <%= form_tag @url_search, :method => :get do %>
+                Escolha a data de:
+                <%= date_field 'of_date', params[:chart] %>
+                até:
+                <%= date_field 'to_date', params[:chart] %>
+                <%= submit_tag 'new chart', :class => 'btn search-button' %>
+            <% end %>
+            <div id='chart'  ></div>
+            <%= render_chart @chart, 'chart' %>
+        <% end %>
+      </div>
+
+
+
+    </aside>
+
+  </div>
+
+<% else %>
+  <div class="center hero-unit">
+    <h1>Welcome to the Hours Hjm</h1>
+
+    <h2>
+      This is the home page for the Hours Hjm application.
+    </h2>
+
+    <%= link_to "Sign up now!", signup_path,
+                                :class => "btn btn-large btn-primary" %>
+  </div>
+<% end %>
+
+
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>

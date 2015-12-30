@@ -1,0 +1,62 @@
+<% provide(:title, 'All projects') %>
+
+<h1>Projetos</h1>
+
+
+<%#= link_to "New Project", new_project_path %>
+<div class="row">
+  <aside class="span7 ">
+
+    <div class="row">
+        <div class="pull-left range-query">
+
+          <%= form_tag @url_search, :method => :get do %>
+              <%= text_field_tag 'search[search_word]'%>
+              <%#= autocomplete_field 'search[search_word]', @search.search_word, autocomplete_project_name_projects_path%>
+
+              <%#= hidden_field 'search2[status]', @search2.status = 3 %>
+              <%= submit_tag 'Procurar', :class => 'btn btn-primary search-button' %>
+          <% end %>
+        </div>
+    </div>
+    <%#= will_paginate @projects%>
+    <ul class="users">
+
+        <%= render @projects %>
+    </ul>
+    <%#= will_paginate @projects%>
+  </aside>
+
+  <aside class="span4 ">
+
+    <div>
+      <% if !@chart.nil? %>
+          <%= form_tag @url_search, :method => :get do %>
+
+              <label for="project_id">Projetos</label>
+                <%= select('pr', params[:c], @list_projects ) %>
+
+              <label for="type_id">Cargo</label>
+                <%= select('type', params[:c], @types ) %>
+
+              Escolha a data de:
+              <%= date_field_tag 'of_date', "#{Date.today.beginning_of_month}"  %>
+              até:
+              <%= date_field_tag 'to_date', "#{Date.today.end_of_month}" %>
+              <%= submit_tag 'Gerar Gráfico', :class => 'btn btn-primary search-button' %>
+          <% end %>
+
+          <div id='chart'  ></div>
+          <%= render_chart @chart, 'chart' %>
+      <% end %>
+    </div>
+
+  </aside>
+
+</div>
+<br>
+
+<script type="text/javascript">
+    $(document).ready(draw_chart());
+</script>
+

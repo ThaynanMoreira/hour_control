@@ -1,0 +1,6 @@
+<% if @listProjects.any? %>
+  <ol class="microposts">
+    <%= render :partial => 'projects_form', :collection => @listProjects %>
+  </ol>
+  <%#= will_paginate @listProjects %>
+<% end %>

@@ -1,0 +1,204 @@
+
+
+<!-- links para fazer o datepiker funcionar  -->
+<link href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
+
+<script src="../files/js/jquery.min.js"></script>
+<script src="../files/js/bootstrap.js"></script>
+<script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR.js"></script>
+<!-- links para fazer o datepiker funcionar  -->
+
+
+<div class="row">
+  <aside class="span8 " >
+    <%= form_for(Historic.new(:work_date => @work_date )) do |f| %>
+
+
+        Dia: <%= Date.parse(@work_date).strftime"%d/%m/%Y" %>
+
+        <label for="project_id">Projetos</label>
+          <%= f.select('project_id', @projects ) %>
+
+        <label for="historic_task_id">Tarefas</label>
+          <%= f.select(:task_id, @tasks ) %>
+
+
+        <div class="field">
+          Entrada
+          <%= f.time_field :enter_work , {:onchange => "enter_work()" } %>
+        </div>
+
+        <div class="field">
+          Saída
+          <%= f.time_field :exit_work , { :onchange => "exit_work()"} %>
+        </div>
+
+        <div class="field">
+          duração
+          <%= time_field_tag :duration,{},{:readonly=>"readonly"} %>
+        </div>
+
+        <div class="field" >
+          <%= f.hidden_field :work_date %>
+
+        </div>
+
+        <div class="field" >
+          Observação
+          <%= f.text_field :comment %>
+        </div>
+
+
+        <div class="actions">
+          <%= f.submit "Comfirmar", :class => "btn  btn-primary" %>
+        </div>
+    <% end %>
+  </aside>
+
+  <aside class="span4 ">
+    <%= form_for(Historic.new(:work_date => @work_date )) do |d| %>
+        <div  data-behaviour='datepicker'>
+          <%= d.hidden_field :work_date %>
+        </div>
+    <% end %>
+  </aside>
+
+
+</div>
+
+<%= render 'layouts/historic_feed' %>
+
+
+<script type="text/javascript">
+
+    $('[data-behaviour~=datepicker]').datepicker({
+            format: "yyyy-mm-dd",
+            startDate: "2013/01/01",
+            language: "pt-BR",
+            todayHiglight: true
+        }).on('changeDate', function(e){
+
+                    window.location.href = "/daily?day=" + e.format('yyyy-mm-dd');
+
+        });
+
+</script>
+
+<script type="text/javascript">
+
+        function enter_work(){
+
+            var enter = document.getElementById("historic_enter_work").value;
+            var exit = document.getElementById("historic_exit_work");
+            var duration = document.getElementById("duration");
+
+
+            if (exit.value == ""){
+
+                var hours = (parseInt(enter.split(':')[0]) + 08);
+
+                var minutes = enter.split(':')[1];
+                minutes = minutes.toString().length<2?'0'+minutes:minutes;
+                if(minutes<0){
+                    hours--;
+                    minutes = 60 + minutes;
+                }
+
+                hours = hours.toString().length<2?'0'+hours:hours;
+                exit.value = hours + ':' + minutes;
+
+                duration.value = "08:00";
+            }else{
+                var hours = exit.value.split(':')[0] - enter.split(':')[0];
+                var minutes = exit.value.split(':')[1] - enter.split(':')[1];
+                minutes = minutes.toString().length<2?'0'+minutes:minutes;
+                if(minutes<0){
+                    hours--;
+                    minutes = 60 + minutes;
+                }
+                hours = hours.toString().length<2?'0'+hours:hours;
+                duration.value = hours + ':' + minutes;
+            }
+
+
+        }
+
+        function exit_work(){
+            var enter = document.getElementById("historic_enter_work").value;
+            var exit = document.getElementById("historic_exit_work").value;
+            var duration = document.getElementById("duration");
+
+
+            if (exit != '' && enter != '' ){
+                var hours = exit.split(':')[0] - enter.split(':')[0];
+                var minutes = exit.split(':')[1] - enter.split(':')[1];
+                minutes = minutes.toString().length<2?'0'+minutes:minutes;
+                if(minutes<0){
+                    hours--;
+                    minutes = 60 + minutes;
+                }
+                hours = hours.toString().length<2?'0'+hours:hours;
+                duration.value = hours + ':' + minutes;
+            }
+        }
+
+        function durationFunc(){
+
+            var enter = document.getElementById("historic_enter_work").value;
+            var exit = document.getElementById("historic_exit_work");
+            var duration = document.getElementById("duration").value;
+
+
+            if (exit != '' && enter != ''){
+                var hours = enter.split(':')[0] + duration.split(':')[0] ;
+                var minutes = enter.split(':')[1] + duration.split(':')[1];
+                minutes = minutes.toString().length<2?'0'+minutes:minutes;
+                if(minutes<0){
+                    hours--;
+                    minutes = 60 + minutes;
+                }
+                hours = hours.toString().length<2?'0'+hours:hours;
+                exit.value = hours + ':' + minutes;
+            }
+
+        }
+
+        function onloadForm(){
+
+            var enter = document.getElementById("historic_enter_work");
+            var exit = document.getElementById("historic_exit_work");
+            var duration = document.getElementById("duration");
+            var d=new Date();
+
+            enter.value = arrendondarHora(d.getHours(), d.getMinutes());
+
+            exit.value = arrendondarHora((d.getHours()+1), d.getMinutes());
+            duration.value = "01:00";
+
+        }
+
+        $(document).ready(onloadForm());
+
+
+        function arrendondarHora(hour, minute){
+
+            if(minute <= 15){
+                minute = 0;
+            }else if(minute <= 44){
+                minute = 30;
+            }else if(minute <= 59){
+                minute = 0;
+                hour += 1;
+            }else{
+                minute = 0;
+            }
+            minute = minute.toString().length<2?'0'+minute:minute;
+            hour = hour.toString().length<2?'0'+hour:hour;
+            return (hour + ':' + minute);
+
+        }
+
+</script>
+
+
