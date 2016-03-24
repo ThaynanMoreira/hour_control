@@ -2,7 +2,7 @@
   <div class=" navbar navbar-fixed-top  navbar-header navbar-default">
     <div class="container">
       <% if signed_in? %>
-      <%= link_to "HJM Hours", root_path, :id => "logo", :data => { :no_turbolink => true } %>
+      <%= link_to "Hour Control", root_path, :id => "logo", :data => { :no_turbolink => true } %>
       <nav class="">
         <ul class="nav navbar-nav pull-right">
 
@@ -13,7 +13,7 @@
             <li><%= link_to "Mês", monthly_view_path, :data => { :no_turbolink => true } %></li>
             <li><%= link_to "Dia", daily_path(:day => (Date.today.strftime"%Y-%m-%d")), :data => { :no_turbolink => true }%></li>
               <% if current_user.type.id == 1 %>
-                  <% @notifications = Confirmation.where(:confirm => false).count %>
+                  <% @notifications = User.where(:confirm => false).count %>
                   <% if @notifications > 0 %>
                     <li><a data-no-turbolink='true' href="/users_config">Controle de Usuários <span class="badge"><%= @notifications %></span></a></li>
                   <% else %>
@@ -44,7 +44,7 @@
         </ul>
       </nav>
           <% else %>
-          <%= link_to "HJM Hours", root_path, :id => "logo", :data => { :no_turbolink => true } %>
+          <%= link_to "Hour Control", root_path, :id => "logo", :data => { :no_turbolink => true } %>
           <nav>
             <ul class="nav navbar-nav pull-right">
             <li><%= link_to "Entre", signin_path, :data => { :no_turbolink => true } %></li>

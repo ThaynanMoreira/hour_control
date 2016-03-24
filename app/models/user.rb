@@ -5,17 +5,15 @@ class User < ActiveRecord::Base
 	has_many :relations, :foreign_key => "user_id", :dependent => :destroy
 	has_many :projects_followeds, :through => :relations, :source => :project
 	has_many :historics_followeds, :through => :projects_followeds, :source => :historics
-  belongs_to :confirmation, :dependent => :destroy
 
 	before_save :encrypt_password
 	before_create :create_remember_token
 	
 	
-  attr_accessible :name, :email, :password, :password_confirmation, :type_id
+  attr_accessible :name, :email, :password, :password_confirmation, :type_id, :confirm
 	attr_accessor :password, :password_confirmation
 
 	validates :name, :presence => true, :length => {:maximum => 50}
-	validates :type_id, :presence => true
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	validates :email, :presence => true, :format => {:with => VALID_EMAIL_REGEX},:uniqueness => { :case_sensitive => false}
 	

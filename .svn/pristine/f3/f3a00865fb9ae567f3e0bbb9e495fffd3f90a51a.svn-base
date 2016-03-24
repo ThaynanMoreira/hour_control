@@ -1,4 +1,0 @@
-<%= button_to "", relations_path(:user_id => @user.id, :project_id => @project.id), :html => { :method => :post },
-              :remote => true, :class => "btn btn-small btn-primary" %>
-
-

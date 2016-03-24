@@ -4,18 +4,58 @@
 	end
 
 	def create
-		user = User.where(:email => params[:session][:email].downcase)[0]
-		if (user && user["password_hash"] == BCrypt::Engine.hash_secret(params[:session][:password], user["password_salt"]))
-      if(Confirmation.where(:user_id => user.id)[0]["confirm"] == true)
-			  sign_in user
-      	redirect_back_or daily_path(:day => (Date.today.strftime"%Y-%m-%d"))
+
+    if(params[:session].nil?)
+      email = params[:email]
+      password = params[:password]
+    else
+      email = params[:session][:email]
+      password = params[:session][:password]
+    end
+
+    user = User.where(:email => email)[0]
+		if (user && user["password_hash"] == BCrypt::Engine.hash_secret(password, user["password_salt"]))
+      if(user.confirm == true)
+        respond_to do |format|
+          format.html {
+            sign_in user
+            redirect_back_or daily_path(:day => (Date.today.strftime"%Y-%m-%d"))
+          }
+          if params[:callback]
+            token = json_sign_in user
+            format.json { render :json => {:access_token => token},:status => :accepted, :result => :accepted, :callback => params[:callback]}
+          else
+            token = json_sign_in user
+            format.json { render :json => {:access_token => token}, :status => :accepted, :result => :accepted}
+          end
+        end
       else
-        flash[:error] = 'Você ainda não recebeu autorização de um coordenador' # Not quite right!
-        redirect_to signin_path
+        respond_to do |format|
+          format.html {
+            flash[:error] = 'Você ainda não recebeu autorização de um coordenador' # Not quite right!
+            redirect_to signin_path
+          }
+          if params[:callback]
+            format.json { render :json => {:error_message => 'Você ainda não recebeu autorização de um coordenador'},:status => 401, :result => :accepted, :callback => params[:callback]}
+          else
+            token = json_sign_in user
+            format.json { render :json => {:error_message => 'Você ainda não recebeu autorização de um coordenador'},:status => 401, :result => :accepted}
+          end
+        end
       end
-		else
-			flash[:error] = 'Invalid email/password combination' # Not quite right!
-      		redirect_to signin_path
+    else
+      respond_to do |format|
+        format.html {
+          flash[:error] = 'Invalid email/password combination' # Not quite right!
+          redirect_to signin_path
+        }
+        if params[:callback]
+          format.json { render :json => {:error_message => 'Invalid email/password combination'},:status => 401, :result => :accepted, :callback => params[:callback]}
+        else
+          token = json_sign_in user
+          format.json { render :json => {:error_message => 'Invalid email/password combination'},:status => 401, :result => :accepted}
+        end
+      end
 		end
 	end
 

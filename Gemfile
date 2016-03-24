@@ -7,7 +7,7 @@ gem 'rails', '3.2.17'
 
 gem 'sqlite3'
 
-#gem 'json'
+gem 'json', '1.8.1'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -67,7 +67,7 @@ group :doc do
   gem 'sdoc'
 end
 
-gem 'turbolinks'
+#gem 'turbolinks'
 
 #News Gems 4
 #gem 'strong_parameters'

@@ -84,23 +84,9 @@ class StaticPagesController < ApplicationController
 
         @search = Search.new(params[:search])
 
-        @users_confirm = Confirmation.where(:confirm => true)
         @list_search_users = @search.search_by_name(User)
-        @users = []#@list_search_users.where(:id => @users_confirm.id)
-        @no_confirms = []
-        @list_search_users.each do |user|
-          @confirm = @users_confirm.where(:user_id => user.id).first
-          if @confirm != nil
-            if @confirm.confirm == true
-              @users.append(user)
-            else
-              @no_confirms.append(user)
-            end
-          else
-            @no_confirms.append(user)
-          end
-
-        end
+        @users = @list_search_users.where(:confirm => true)
+        @no_confirms = User.where(:confirm => false)
 
       end
 

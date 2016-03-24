@@ -1,4 +1,4 @@
-Faicon::Application.routes.draw do
+App::Application.routes.draw do
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -75,7 +75,6 @@ Faicon::Application.routes.draw do
   end
 
   resources :searchs
-  resource :confirmations , :only => [:create]
   resources :users, :only => [:create, :show, :index, :edit, :update] do
     get :autocomplete_user_name, :on => :collection
   end
@@ -87,6 +86,7 @@ Faicon::Application.routes.draw do
   
   resources :historics
   match '/clone',  :to => 'historics#clone', :via => 'get'
+  match '/confirm',  :to => 'users#confirm', :via => 'post'
   resources :relations, :only => [:create,  :destroy]
 
 

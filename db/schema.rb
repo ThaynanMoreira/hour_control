@@ -10,18 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140430190613) do
+ActiveRecord::Schema.define(:version => 20160107192950) do
 
   create_table "clients", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
+    t.string   "name",        :limit => 50, :null => false
+    t.string   "description",               :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "confirmations", :force => true do |t|
-    t.integer "user_id"
-    t.boolean "confirm", :default => false
   end
 
   create_table "historics", :force => true do |t|
@@ -29,21 +24,21 @@ ActiveRecord::Schema.define(:version => 20140430190613) do
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "work_date"
-    t.time     "enter_work"
-    t.time     "exit_work"
-    t.string   "comment"
-    t.float    "hours_used"
+    t.date     "work_date",  :null => false
+    t.time     "enter_work", :null => false
+    t.time     "exit_work",  :null => false
+    t.text     "comment"
+    t.float    "hours_used", :null => false
     t.integer  "task_id"
     t.integer  "type_id"
   end
 
   create_table "projects", :force => true do |t|
-    t.string   "name"
+    t.string   "name",        :limit => 50, :null => false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "description"
+    t.text     "description"
     t.integer  "client_id"
   end
 
@@ -61,17 +56,17 @@ ActiveRecord::Schema.define(:version => 20140430190613) do
   add_index "relations", ["user_id"], :name => "index_relations_on_user_id"
 
   create_table "tasks", :force => true do |t|
-    t.string "name"
+    t.string "name", :null => false
   end
 
   create_table "timetables", :force => true do |t|
     t.integer  "type_id"
-    t.integer  "hours_amount"
+    t.integer  "hours_amount",    :null => false
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "hours_completed"
-    t.string   "observation"
+    t.float    "hours_completed", :null => false
+    t.text     "observation"
     t.integer  "month"
     t.integer  "year"
   end
@@ -80,24 +75,24 @@ ActiveRecord::Schema.define(:version => 20140430190613) do
   add_index "timetables", ["type_id"], :name => "index_timetables_on_type_id"
 
   create_table "types", :force => true do |t|
-    t.string   "name"
+    t.string   "name",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "users", :force => true do |t|
-    t.string   "name"
-    t.string   "email"
+    t.string   "name",                              :null => false
+    t.string   "email",                             :null => false
     t.string   "password_salt"
     t.string   "password_hash"
     t.string   "image"
     t.integer  "type_id"
     t.string   "remember_token"
+    t.boolean  "confirm",        :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
   add_index "users", ["type_id"], :name => "index_users_on_type_id"
 

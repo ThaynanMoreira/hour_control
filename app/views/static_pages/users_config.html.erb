@@ -3,9 +3,9 @@
 <div class="row">
 
 
-<% if Confirmation.where(:confirm => false).count > 0 %>
+<% if User.where(:confirm => false).count > 0 %>
   <div class="table-responsive">
-    <table class="table" border="1" >
+    <table class="table" border="0" >
       <th> Name </th>
       <th> Email </th>
       <th> Cargo </th>
@@ -13,13 +13,12 @@
 
       <% @no_confirms.each do |user| %>
 
-           <%# @confirm = Confirmation.where(:user_id => user.id).first %>
-           <%# if @confirm.confirm == false %>
+
           <tr>
             <td> <%= user.name %> </td>
             <td> <%= user.email %> </td>
             <td> <%= user.type.name %> </td>
-            <td> <%= button_to "Confirmar", confirmations_path(:user_id => user.id), :html => { :method => :post },
+            <td> <%= button_to "Confirmar", confirm_path(:id => user.id), :html => { :method => :post },
                                :class => "btn btn-small btn-primary" %> </td>
 
 

@@ -53,18 +53,9 @@ class UsersController < ApplicationController
       #@search = Search.new({"search"=>{"search_word"=>{}}})
       @search = Search.new(params[:search])
 
-      @users_confirm = Confirmation.where(:confirm => true)
       @list_search_users = @search.search_by_name(User)
-      @users = []#@list_search_users.where(:id => @users_confirm.id)
-      @list_search_users.each do |user|
-           #@confirm = Confirmation.where(:user_id => user.id).first
-           if @users_confirm.where(:user_id => user.id)[0] != nil
-             if @users_confirm.where(:user_id => user.id)[0].confirm == true
-               @users.append(user)
-             end
-           end
+      @users = @list_search_users.where(:confirm => true)
 
-      end
       @chart_user = User.all.first
       if(!@users.blank?)
         @list_users = @users.collect{ |t| [t.name, t.id]}
@@ -114,18 +105,17 @@ class UsersController < ApplicationController
 	        format.json { head :no_content }
 	      else
 	        format.html { render :action => 'edit' }
-	        format.json { render :json => @user.errors, :status => :unprocessable_entity }
+	        format.json { render :json => @user.errors.full_messages, :status => :unprocessable_entity }
 	      end
 	    end
 	  end
 
 	def create
 	    @user = User.new(params[:user])
+	    #@user = User.new(user_params)
 
       respond_to do |format|
         if @user.save
-
-          @confirm = Confirmation.create(:user_id => @user.id)
 
           flash[:success] = "Aguarde a aprovação de um coordenador"
           format.html { redirect_to root_path, :notice => 'Aguarde a aprovação de um coordenador' }
@@ -133,10 +123,25 @@ class UsersController < ApplicationController
         else
           flash[:error] = "Erro ao se cadastrar"
           format.html { render :action => 'new' }
-          format.json { render :json => @user.errors, :status => :unprocessable_entity }
+          format.json { render :json => @user.errors.full_messages, :status => :unprocessable_entity }
         end
       end
-	  end
+  end
+
+  def confirm
+
+    user = User.find(params[:id])
+    if(user.confirm == false)
+      if user.update_attribute(:confirm, true)
+        flash[:success] = "Confirmation successful!"
+        redirect_to users_config_path
+      else
+        flash[:error] = "Confirmation failed"
+        redirect_to users_config_path
+      end
+    end
+
+  end
 
 
 	private
@@ -146,9 +151,9 @@ class UsersController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    #def user_params
-    #  params.require(:user).permit(:name, :email, :password, :password_confirmation, :type_id)
-    #end
+    def user_params
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :type_id)
+    end
 
     
     def correct_user

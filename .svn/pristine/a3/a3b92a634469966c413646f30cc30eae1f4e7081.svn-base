@@ -1,4 +1,0 @@
-<%= button_to "", User.where(:id => @user.id)[0].relations.where(:project_id => @project.id)[0],  :method => :delete,
-              :remote => true, :class => "btn btn-small btn-danger" %>
-
-

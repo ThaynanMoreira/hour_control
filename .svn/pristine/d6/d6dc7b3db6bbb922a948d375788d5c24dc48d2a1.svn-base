@@ -1,3 +1,0 @@
-<li>
-	<%= link_to project.name, project %>
-</li>

@@ -1,9 +1,12 @@
 
 <div class="row">
     <div class="span6 offset3">
-      <%= form_for(@user) do |f| %>
-        <%= render 'layouts/error_messages', :object => f.object %>
+    <%= form_for(@user, :html=>{:onsubmit=>"return checkForm();"}) do |f| %>
+      <%= render 'layouts/error_messages', :object => f.object %>
 
+      <div id="error_explanation">
+
+      </div>
 
 
       <div class="field">
@@ -24,7 +27,8 @@
       </div><br>
 
       <label for="user_type_id">Cargo</label>
-      <%= select(:user,:type_id, @types ) %><br><br>
+      <%#= select(:user,:type_id, @types ) %>
+      <%= f.select :type_id, Type.all.collect {|t| [ "#{t.name}", t.id ] }  %><br><br>
 
 
       <div class="actions">
@@ -34,3 +38,92 @@
     <% end %>
   </div>
 </div>
+
+<script type="text/javascript">
+
+    function checkForm(){
+
+        var error_messages = document.getElementById("error_explanation");
+        var formName = document.getElementById("user_name");
+        var formEmail = document.getElementById("user_email");
+        var formPsw1 = document.getElementById("user_password");
+        var formPsw2 = document.getElementById("user_password_confirmation");
+        var opcoes = document.getElementById("user_type_id");
+
+
+        var divError = document.getElementById("div_error");
+        if(divError){
+            divError.remove();
+        }
+        divError = document.createElement("div");
+        divError.id = "div_error";
+        divError.class = "alert alert-error";
+        var ulError = document.createElement("ul");
+        error_messages.appendChild(divError);
+        divError.appendChild(ulError);
+
+        if(formName.value == "") {
+            str = "Error: Username cannot be blank!";
+            ulError.appendChild(getLi(str));
+            formName.focus();
+            return false;
+        }
+        re = /^\w+$/;
+        if(!re.test(formName.value)) {
+            str = "Error: Username must contain only letters, numbers and underscores!";
+            ulError.appendChild(getLi(str));
+            formName.focus();
+            return false;
+        }
+
+        var emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+        if(formEmail ==""){
+            str = "Error: You must enter your email";
+            ulError.appendChild(getLi(str));
+            formEmail.focus();
+            return false;
+        }
+        if(!emailRegex.test(formEmail.value)){
+            str = "Error: You have entered an invalid email";
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(str));
+            ulError.appendChild(li);
+            formEmail.focus();
+            return false;
+        }
+
+        if(formPsw1.value != "" && formPsw1.value == formPsw2.value) {
+            if(formPsw1.value.length < 6) {
+                str = "Error: Password must contain at least six characters!";
+                formPsw1.focus();
+                ulError.appendChild(getLi(str));
+                return false;
+            }
+            if(formPsw1.value == formName.value) {
+                str = "Error: Password must be different from Username!";
+                formPsw1.focus();
+                ulError.appendChild(getLi(str));
+                return false;
+            }
+        } else {
+            str = "Error: Please check that you've entered and confirmed your password!";
+            formPsw1.focus();
+            ulError.appendChild(getLi(str));
+            return false;
+        }
+
+        divError.remove();
+        return true;
+    }
+
+    function getLi(text){
+        var li = document.createElement("li");
+        var divTemp = document.createElement("div");
+        divTemp.class = "alert alert-error";
+        divTemp.appendChild(document.createTextNode(text));
+        li.appendChild(divTemp);
+        return li;
+    }
+
+</script>
